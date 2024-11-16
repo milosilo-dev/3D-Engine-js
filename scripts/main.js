@@ -32,12 +32,20 @@ mesh.fill_from_array([
 
 var debug_mode = true;
 var debug_compoent = document.getElementById("debug");
+var debug_front_component = document.getElementById("debug-front")
 debug_compoent.onclick = debug;
 
 draw.init();
 
 function debug(){
     debug_mode = !debug_mode;
+    if (debug_mode){
+        debug_compoent.style.background = "hsl(115, 100%, 32%)";
+        debug_front_component.style.background = "hsl(106, 100%, 47%)";
+    }else{
+        debug_compoent.style.background = "hsl(340deg 100% 32%)";
+        debug_front_component.style.background = "hsl(345deg 100% 47%)";
+    }
 }
 
 function start(){

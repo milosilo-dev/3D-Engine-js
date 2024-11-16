@@ -4,34 +4,40 @@ export class Mesh_Converter{
     // Fills the points array from an array of vector3 points
     // 3 vector 3 points = one triangle
     // three floats = one vector 3
-    fill_from_array (arr){
+    fill_from_array(arr) {
         var x = [];
         var points = [];
-
-        var index = 0;
         var v3 = [];
-        arr.forEach((element) => {
-            if (index % 3 == 0 && index != 0){
+    
+        // First pass: Split input into groups of three
+        arr.forEach((element, index) => {
+            v3.push(element);
+            if ((index + 1) % 3 === 0) {
                 x.push(v3);
                 v3 = [];
             }
-
-            v3.push(element);
-            index++;
         });
-
-        var index = 0;
-        var v3 = [];
-        x.forEach((element) => {
-            if (index % 3 == 0 && index != 0){
+    
+        // Push any remaining elements as a final group
+        if (v3.length > 0) {
+            x.push(v3);
+        }
+    
+        // Second pass: Group groups of three into triangles
+        v3 = [];
+        x.forEach((element, index) => {
+            v3.push(element);
+            if ((index + 1) % 3 === 0) {
                 points.push(v3);
                 v3 = [];
             }
-
-            v3.push(element);
-            index++;
         });
-
+    
+        // Push any remaining triangles
+        if (v3.length > 0) {
+            points.push(v3);
+        }
+    
         return points;
     }
 }
