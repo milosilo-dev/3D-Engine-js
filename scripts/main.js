@@ -30,7 +30,7 @@ mesh.fill_from_array([
     1, 0, 1, 0, 0, 0, 1, 0, 0
 ]);
 
-var debug_mode = true;
+var debug_mode = false;
 var debug_compoent = document.getElementById("debug");
 var debug_front_component = document.getElementById("debug-front")
 debug_compoent.onclick = debug;
@@ -57,8 +57,11 @@ function update(delta_time){
     mesh.rotaition[1] += 0.005;
     mesh.rotaition[2] += 0.03;
 
-    mesh.project().forEach((element) => {
-        draw.triangle(element[0][0], element[0][1], element[1][0], element[1][1], element[2][0], element[2][1], "white", true, 1);
+    let index = 0;
+    let projected = mesh.project()
+
+    projected[0].forEach((element) => {
+        draw.triangle(element[0][0], element[0][1], element[1][0], element[1][1], element[2][0], element[2][1], "rgb(" + projected[1][index][0].toString() + " " + projected[1][index][1].toString() + " " + projected[1][index][2].toString() + ")", true, 1);
 
         if (debug_mode){
             draw.triangle(element[0][0], element[0][1], element[1][0], element[1][1], element[2][0], element[2][1], "red", false, 3);
@@ -67,5 +70,6 @@ function update(delta_time){
             draw.vertex(element[1][0], element[1][1], "red", 5);
             draw.vertex(element[2][0], element[2][1], "red", 5);
         }
+        index ++;
     });
 }

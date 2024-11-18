@@ -11,6 +11,7 @@ export class Draw{
         this.context = this.canvas.getContext("2d");
 
         this.fps_counter = document.getElementById("fps");
+        this.fps_time = 0;
 
         this.running = true;
         this.time = 0;
@@ -39,7 +40,11 @@ export class Draw{
         var deltaTime = performance.now() - this.time;
         this.time = performance.now();
 
-        this.fps_counter.textContent = (1000 / deltaTime).toFixed();
+        this.fps_time += deltaTime / 1000;
+        if (this.fps_time >= 0.5){
+            this.fps_counter.textContent = (1000 / deltaTime).toFixed();
+            this.fps_time = 0;
+        }
 
         this.context.fillStyle = this.BACKGROUND_COLOR;
         this.context.fillRect(0, 0, this.WIDTH, this.HEIGHT);

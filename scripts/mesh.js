@@ -36,6 +36,7 @@ export class Mesh
 
     project (){
         var projected = [];
+        var colors = [];
 
         var matRotX = this.projection_tools.RotXMatrix(this.rotaition[0]);
         var matRotY = this.projection_tools.RotYMatrix(this.rotaition[1]);
@@ -57,14 +58,22 @@ export class Mesh
                 normal[1] * (translatedMatrix[1][1] - this.camera.position[1]) +
                 normal[2] * (translatedMatrix[1][2] - this.camera.position[2]) < 0)
             {
-                var projectedMatrix = this.projection_tools.ProjectMatrix(translatedMatrix, this.camera.ProjectionMatrix)
+                var light_direction = [0.0, 0.0, -1.0];
+                var l = Math.sqrt(light_direction[0] * light_direction[0] + light_direction[1] * light_direction[1] + light_direction[2] * light_direction[2])
+                light_direction[0] /= 1; light_direction[1] /= 1; light_direction[2] /= 1;
+
+                var dp = normal[0] * light_direction[0] + normal[1] * light_direction[1] + normal[2] * light_direction[2];
+
+
+                var projectedMatrix = this.projection_tools.ProjectMatrix(translatedMatrix, this.camera.ProjectionMatrix);
 
                 // Scale mesh to screen
                 projectedMatrix = this.projection_tools.ScaleToScreen(projectedMatrix, this.height, this.width);
 
                 projected.push(projectedMatrix);
+                colors.push([Math.floor(dp * 255), Math.floor(dp * 255), Math.floor(dp * 255)]);
             }
         });
-        return projected;
+        return [projected, colors];
     }
 }
