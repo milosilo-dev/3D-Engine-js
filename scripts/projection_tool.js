@@ -46,17 +46,17 @@ export class Projection_Tools{
     TranslateMatrix(Matrix, transform){
         let tempTri = [[...Matrix[0]], [...Matrix[1]], [...Matrix[2]]];
 
-        tempTri[0][0] += transform[0];
-        tempTri[1][0] += transform[0];
-        tempTri[2][0] += transform[0];
+        tempTri[0][0] += transform.x;
+        tempTri[1][0] += transform.x;
+        tempTri[2][0] += transform.x;
 
-        tempTri[0][1] += transform[1];
-        tempTri[1][1] += transform[1];
-        tempTri[2][1] += transform[1];
+        tempTri[0][1] += transform.y;
+        tempTri[1][1] += transform.y;
+        tempTri[2][1] += transform.y;
 
-        tempTri[0][2] += transform[2];
-        tempTri[1][2] += transform[2];
-        tempTri[2][2] += transform[2];
+        tempTri[0][2] += transform.z;
+        tempTri[1][2] += transform.z;
+        tempTri[2][2] += transform.z;
 
         return tempTri;
     }
@@ -106,5 +106,12 @@ export class Projection_Tools{
         normal[2] /= l;
 
         return normal;
+    }
+
+    CalculateLightDotProduct(light_direction, normal){
+        var l = Math.sqrt(light_direction[0] * light_direction[0] + light_direction[1] * light_direction[1] + light_direction[2] * light_direction[2])
+        light_direction[0] /= l; light_direction[1] /= l; light_direction[2] /= l;
+
+        return normal[0] * light_direction[0] + normal[1] * light_direction[1] + normal[2] * light_direction[2];
     }
 }

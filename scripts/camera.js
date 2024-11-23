@@ -11,5 +11,8 @@ export class Camera{
                                 [0, this.fovRad, 0, 0],
                                 [0, 0, far / (far - near), 1],
                                 [0, 0, (-far * near) / (far - near), 0]];
+
+        this.near = 0;
+        this.far = 0;
     }
 }

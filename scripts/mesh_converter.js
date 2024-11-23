@@ -40,4 +40,45 @@ export class Mesh_Converter{
     
         return points;
     }
+
+    // Fills the points array from an .obj file
+    async load_from_object_file(filename){
+        let text = await fetch(filename);
+        text = await text.text();
+
+        var verts = [];
+        var points = [];
+        var name = "";
+        var lines = text.split("\n");
+
+        lines.forEach((element) => {
+            var modifier = "";
+            var sections = element.split(" ");
+
+            modifier = sections[0];
+            delete sections[0];
+
+            switch (modifier){
+                case("v"):
+                    if (sections.length == 4){
+                        verts.push([parseFloat(sections[1]), parseFloat(sections[2]), parseFloat(sections[3])]);
+                    }
+                    break;
+                case("f"):
+                    if (sections.length == 4){
+                        points.push([verts[parseInt(sections[1]) - 1], 
+                                    verts[parseInt(sections[2]) - 1], 
+                                    verts[parseInt(sections[3]) - 1]])
+                    }
+                    break;
+                case("o"):
+                    if (sections.length == 2){
+                        name = sections[0];
+                    }
+                    break;
+            }
+        })
+
+        return [points, name];
+    }
 }

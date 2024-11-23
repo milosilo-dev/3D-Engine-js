@@ -1,7 +1,7 @@
 import { Draw } from "./draw.js";
 import { Mesh } from "./mesh.js";
 import { Camera } from "./camera.js";
-
+import { Vert } from "./vert.js";
 
 const HEIGHT = 600;
 const WIDTH = 800;
@@ -12,10 +12,10 @@ const fov = 90.0;
 const aspectRatio = HEIGHT / WIDTH;
 
 var draw = new Draw(HEIGHT, WIDTH, "black", start, update);
-var camera = new Camera([0, 0, 0], near, far, fov, aspectRatio);
+var camera = new Camera(new Vert(0, 0, 0), near, far, fov, aspectRatio);
 
-var mesh = new Mesh(HEIGHT, WIDTH, [0, 0, 3], [0, 0, 0], [1, 1, 1], camera);
-mesh.fill_from_array([
+var mesh1 = new Mesh(HEIGHT, WIDTH, new Vert(-2, 0, 3), new Vert(0, 0, 0), new Vert(.5, .5, .5), camera, draw);
+mesh1.fill_from_array([
     0, 0, 0, 0, 1, 0, 1, 1, 0, 
     0, 0, 0, 1, 1, 0, 1, 0, 0, 
     1, 0, 0, 1, 1, 0, 1, 1, 1, 
@@ -29,6 +29,8 @@ mesh.fill_from_array([
     1, 0, 1, 0, 0, 1, 0, 0, 0, 
     1, 0, 1, 0, 0, 0, 1, 0, 0
 ]);
+var mesh2 = new Mesh(HEIGHT, WIDTH, new Vert(3, 0, 4), new Vert(0, 0, 0), new Vert(.5, .5, .5), camera, draw);
+await mesh2.load_from_obj("meshes/robot.obj");
 
 var debug_mode = false;
 var debug_compoent = document.getElementById("debug");
@@ -53,23 +55,15 @@ function start(){
 }
 
 function update(delta_time){
-    mesh.rotaition[0] += 0.01;
-    mesh.rotaition[1] += 0.005;
-    mesh.rotaition[2] += 0.03;
+    mesh1.rotaition.x += 0.01;
+    mesh1.rotaition.y += 0.005;
+    mesh1.rotaition.z += 0.03;
 
-    let index = 0;
-    let projected = mesh.project()
+    mesh1.project(debug_mode);
 
-    projected[0].forEach((element) => {
-        draw.triangle(element[0][0], element[0][1], element[1][0], element[1][1], element[2][0], element[2][1], "rgb(" + projected[1][index][0].toString() + " " + projected[1][index][1].toString() + " " + projected[1][index][2].toString() + ")", true, 1);
+    mesh2.rotaition.x += 0.005;
+    mesh2.rotaition.y += 0.01;
+    mesh2.rotaition.z += 0.02;
 
-        if (debug_mode){
-            draw.triangle(element[0][0], element[0][1], element[1][0], element[1][1], element[2][0], element[2][1], "red", false, 3);
-
-            draw.vertex(element[0][0], element[0][1], "red", 5);
-            draw.vertex(element[1][0], element[1][1], "red", 5);
-            draw.vertex(element[2][0], element[2][1], "red", 5);
-        }
-        index ++;
-    });
+    mesh2.project(debug_mode);
 }
